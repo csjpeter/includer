@@ -3,7 +3,7 @@ from conan import ConanFile
 from conan.tools.build import check_min_cppstd
 #from conan.errors import ConanInvalidConfiguration
 #import os
-from conan.tools.cmake import CMake, CMakeToolchain
+from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 #from conan.tools.files import copy, collect_libs
 
 class IncluderConan(ConanFile):
