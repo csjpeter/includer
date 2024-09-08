@@ -2,8 +2,8 @@
 add_executable(includer main.cpp)
 
 # Installation rules
-#install(TARGETS includer
-#        RUNTIME DESTINATION bin)
+install(TARGETS includer
+        RUNTIME DESTINATION bin)
 
 # Find and link cxxopts
 find_package(cxxopts REQUIRED)
