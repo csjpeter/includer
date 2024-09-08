@@ -1,9 +1,9 @@
 from conan import ConanFile
 #from conan.tools.cmake import CMake, cmake_layout, CMakeToolchain
+from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 from conan.tools.build import check_min_cppstd
 #from conan.errors import ConanInvalidConfiguration
 #import os
-from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 #from conan.tools.files import copy, collect_libs
 
 class IncluderConan(ConanFile):
@@ -25,8 +25,8 @@ class IncluderConan(ConanFile):
 #        self.folders.generators = "build"
 #        self.folders.src = "src"
 
-#    def layout(self):
-#        cmake_layout(self)
+    def layout(self):
+        cmake_layout(self)
 
     def build(self):
         cmake = CMake(self)
