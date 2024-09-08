@@ -6,6 +6,7 @@ all:
 	cp build/Debug/src/includer release/
 
 clean:
-	rm -fr release
-	rm -fr build
+	rm CMakeUserPresets.json || true
+	rm -fr release || true
+	rm -fr build || true
 
