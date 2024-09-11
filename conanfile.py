@@ -5,10 +5,16 @@ from conan.tools.build import check_min_cppstd
 class IncluderConan(ConanFile):
     name = "includer"
     version = "1.0"
+    license = "BSD-3-Clause"
+    author = "Peter Csaszar <csjpeter@gmail.com>"
+    url = "http://github.com/csjpeter/includer"
+    description = "A project that processes include and frame commands for flexible document content generation."
+    topics = ("template", "include", "frame", "document", "content", "generation")
     package_type = "application"
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
     requires = [
+            "gtest/1.12.1",
             "cxxopts/3.2.0",
     ]
     

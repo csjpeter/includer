@@ -11,7 +11,7 @@ project(includer VERSION 1.0)
 add_subdirectory(src)
 
 include(CTest)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 # Installation rules
 install(TARGETS includer
