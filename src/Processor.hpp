@@ -18,8 +18,6 @@ class Processor
     private:
 	std::shared_ptr<IFileHandler> fileHandler;
 
-	std::string
-	parse(const std::string &input, const std::string &templateDir);
 	std::string processIncludes(const std::string &input,
 				    const std::string &templateDir);
 	std::string

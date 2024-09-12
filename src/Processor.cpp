@@ -15,15 +15,9 @@ Processor::Processor(std::shared_ptr<IFileHandler> fileHandler)
 std::string
 Processor::process(const std::string &input, const std::string &templateDir)
 {
-	return parse(input, templateDir);
-}
-
-std::string
-Processor::parse(const std::string &input, const std::string &templateDir)
-{
 	std::string output = input;
-	output		   = processIncludes(output, templateDir);
-	output		   = processFrames(output, templateDir);
+	output = processFrames(output, templateDir);
+	output = processIncludes(output, templateDir);
 	return output;
 }
 
@@ -32,14 +26,20 @@ Processor::processIncludes(const std::string &input,
 			   const std::string &templateDir)
 {
 	std::regex  includeRegex(R"(@include\s+([^\s]+)@)");
-	std::string output = input;
+	std::string output(input);
 	std::smatch match;
 	while (std::regex_search(output, match, includeRegex))
 	{
 		std::string includeFile = templateDir + "/" + match[1].str();
 		std::string fileContent = fileHandler->readFile(includeFile);
-		output			= match.prefix().str() + fileContent
-		       + match.suffix().str();
+
+		Processor processor(fileHandler);
+
+		std::string tmp;
+		tmp = match.prefix().str();
+		tmp += processor.process(fileContent, templateDir);
+		tmp += match.suffix().str();
+		output = tmp;
 	}
 	return output;
 }
@@ -49,7 +49,7 @@ Processor::processFrames(const std::string &input,
 			 const std::string &templateDir)
 {
 	std::regex  frameRegex(R"(@frame\s+([^\s]+)@)");
-	std::string output = input;
+	std::string output(input);
 	std::smatch match;
 	while (std::regex_search(output, match, frameRegex))
 	{
@@ -67,8 +67,14 @@ Processor::processFrames(const std::string &input,
 		std::string head = frameContent.substr(0, contentPos);
 		std::string tail = frameContent.substr(
 				contentPos + 9); // length of "@content@"
-		output = match.prefix().str() + head + input + tail
-		       + match.suffix().str();
+
+		Processor processor(fileHandler);
+
+		std::string tmp = processor.process(head, templateDir);
+		tmp += match.prefix().str();
+		tmp += match.suffix().str();
+		tmp += processor.process(tail, templateDir);
+		output = tmp;
 	}
 	return output;
 }

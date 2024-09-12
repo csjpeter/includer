@@ -32,17 +32,17 @@ TEST(ProcessorTest, TestFrameProcessing)
 	EXPECT_EQ(output, "Header Content Footer");
 }
 
-TEST(ProcessorTest, TestNestedFrameAndIncludeProcessing)
+TEST(ProcessorTest, TestNestedFrameIntoInclude)
 {
 	MockFileHandler mockHandler;
 	mockHandler.addMockFile("templates/frame.txt",
 				"Header @content@ Footer");
-	mockHandler.addMockFile("templates/include.txt", "Included Content");
+	mockHandler.addMockFile("templates/include.txt",
+				"Included @frame frame.txt@Content");
 
 	Processor   processor(std::make_shared<MockFileHandler>(mockHandler));
 	std::string input  = "@include include.txt@";
-	std::string output = processor.process("@frame frame.txt@",
-					       "templates");
+	std::string output = processor.process(input, "templates");
 
 	EXPECT_EQ(output, "Header Included Content Footer");
 }
@@ -51,7 +51,7 @@ TEST(ProcessorTest, TestNestedIncludeInFrame)
 {
 	MockFileHandler mockHandler;
 	mockHandler.addMockFile("templates/frame.txt",
-				"Header @content@ Footer");
+				"Header @content@@include include.txt@ Footer");
 	mockHandler.addMockFile("templates/include.txt",
 				"Included @include deeper.txt@");
 	mockHandler.addMockFile("templates/deeper.txt", "Deeper Content");
