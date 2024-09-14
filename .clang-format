@@ -1,0 +1,82 @@
+﻿# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# Configurations: Attach, Linux, Mozilla, Stroustrup, Allman, Whitesmiths, GNU, WebKit, Custom
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+Standard: c++20
+UseTab: Always
+TabWidth: 8
+ColumnLimit: 80
+IndentWidth: 8
+ConstructorInitializerIndentWidth: 16
+ContinuationIndentWidth: 16
+
+AlignAfterOpenBracket: Align
+AlwaysBreakAfterDefinitionReturnType: All
+
+IndentAccessModifiers: False
+AccessModifierOffset: 0
+EmptyLineBeforeAccessModifier: Always
+EmptyLineAfterAccessModifier: Always
+
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCompound: true # assignment only
+  PadOperators: true # assignment only
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignFunctionPointers: true # declarations only
+AlignConsecutiveBitFields:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  #AlignCaseArrows: true
+  AlignCaseColons: true
+#AlignConsecutiveTableGenBreakingDAGArgColons:
+#  Enabled: true
+#  AcrossEmptyLines: true
+#  AcrossComments: true
+#AlignConsecutiveTableGenCondOperatorColons:
+#  Enabled: true
+#  AcrossEmptyLines: true
+#  AcrossComments: true
+#AlignConsecutiveTableGenDefinitionColons:
+#  Enabled: true
+#  AcrossEmptyLines: true
+#  AcrossComments: true
+
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2
+
+BreakBeforeBinaryOperators: true
+AlignOperands: AlignAfterOperator
+
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowBreakBeforeNoexceptSpecifier: OnlyWithParen
+
+---
+Language: JavaScript
+BasedOnStyle: WebKit
+UseTab: Always
+TabWidth: 8
+ColumnLimit: 80
+IndentWidth: 8
+ConstructorInitializerIndentWidth: 16
+ContinuationIndentWidth: 16
+...
+
