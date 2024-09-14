@@ -13,6 +13,16 @@ add_subdirectory(src)
 include(CTest)
 add_subdirectory(tests)
 
+add_subdirectory(man)
+
 # Installation rules
 install(TARGETS includer
         RUNTIME DESTINATION bin)
+
+# Debian package rules
+#set(CPACK_GENERATOR "DEB;RPM")
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "includer")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter Csaszar <csjpeter@gmail.com>")
+include(CPack)
