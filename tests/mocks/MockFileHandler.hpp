@@ -21,7 +21,7 @@ class MockFileHandler : public IFileHandler
 	{
 		if (mockFiles.find(path) != mockFiles.end())
 		{
-			return mockFiles[path];
+			return mockFiles.at(path);
 		}
 		throw std::runtime_error("Mock file not found: " + path);
 	}

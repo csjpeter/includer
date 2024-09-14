@@ -12,7 +12,7 @@ TEST(ProcessorTest, TestIncludeProcessing)
 	MockFileHandler mockHandler;
 	mockHandler.addMockFile("templates/file1.txt", "File 1 content");
 
-	Processor   processor(std::make_shared<MockFileHandler>(mockHandler));
+	Processor   processor(mockHandler);
 	std::string input  = "This is a test @include file1.txt@ end of test.";
 	std::string output = processor.process(input, "templates");
 
@@ -25,7 +25,7 @@ TEST(ProcessorTest, TestFrameProcessing)
 	mockHandler.addMockFile("templates/frame.txt",
 				"Header @content@ Footer");
 
-	Processor   processor(std::make_shared<MockFileHandler>(mockHandler));
+	Processor   processor(mockHandler);
 	std::string input  = "Content@frame frame.txt@";
 	std::string output = processor.process(input, "templates");
 
@@ -40,7 +40,7 @@ TEST(ProcessorTest, TestNestedFrameIntoInclude)
 	mockHandler.addMockFile("templates/include.txt",
 				"Included @frame frame.txt@Content");
 
-	Processor   processor(std::make_shared<MockFileHandler>(mockHandler));
+	Processor   processor(mockHandler);
 	std::string input  = "@include include.txt@";
 	std::string output = processor.process(input, "templates");
 
@@ -56,7 +56,7 @@ TEST(ProcessorTest, TestNestedIncludeInFrame)
 				"Included @include deeper.txt@");
 	mockHandler.addMockFile("templates/deeper.txt", "Deeper Content");
 
-	Processor   processor(std::make_shared<MockFileHandler>(mockHandler));
+	Processor   processor(mockHandler);
 	std::string input  = "@frame frame.txt@";
 	std::string output = processor.process(input, "templates");
 
