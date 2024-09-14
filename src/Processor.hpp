@@ -5,21 +5,23 @@
 #pragma once
 #include "IFileHandler.hpp"
 
-#include <memory>
 #include <string>
 
 class Processor
 {
-    public:
-	Processor(std::shared_ptr<IFileHandler> fileHandler);
-	std::string
-	process(const std::string &input, const std::string &templateDir);
+	public:
 
-    private:
-	std::shared_ptr<IFileHandler> fileHandler;
+	explicit Processor(const IFileHandler &fileHandler);
 
-	std::string processIncludes(const std::string &input,
-				    const std::string &templateDir);
-	std::string
-	processFrames(const std::string &input, const std::string &templateDir);
+	std::string process(const std::string &input,
+			    const std::string &templateDir);
+
+	private:
+
+	const IFileHandler &fileHandler;
+
+	std::string	    processIncludes(const std::string &input,
+					    const std::string &templateDir);
+	std::string	    processFrames(const std::string &input,
+					  const std::string &templateDir);
 };

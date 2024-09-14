@@ -9,7 +9,7 @@
 #include <stdexcept>
 
 std::string
-FileHandler::readFile(const std::string &path)
+FileHandler::readFile(const std::string &path) const
 {
 	std::ifstream file(path);
 	if (!file.is_open())
