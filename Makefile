@@ -2,7 +2,7 @@
 all:
 	rm -fr release || true
 	conan build . --profile=C++23 --build=missing -s build_type=Debug
-	ctest --test-dir build/Debug --output-on-failure
+	ctest --test-dir build/Debug --output-on-failure --stop-on-failure
 	mkdir -p release/bin
 	cp build/Debug/src/includer release/bin/
 
