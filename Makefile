@@ -7,7 +7,7 @@ all:
 	mkdir -p release/bin
 	cp build/Debug/src/includer release/bin/
 	cp build/Debug/_CPack_Packages/Linux/DEB/includer-1.0.0-Linux.deb release/
-	#cp build/Debug/_CPack_Packages/Linux/RPM/RPMS/includer-1.0.0-Linux.rpm release/
+	cp build/Debug/_CPack_Packages/Linux/RPM/RPMS/includer-1.0.0-Linux.rpm release/
 
 clean:
 	rm CMakeUserPresets.json || true
@@ -16,7 +16,7 @@ clean:
 	rm -fr Testing || true
 
 deps:
-	sudo apt-get install g++ rpm python3 python3-pip
-	pipx instal lclang-tidy clang-format conan2
+	sudo apt-get install g++ rpm python3 python3-pip pipx g++12
+	pipx install clang-tidy clang-format conan2
 
 

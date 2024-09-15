@@ -1,1 +1,1 @@
-install(FILES includer.1 DESTINATION /usr/share/man/man1)
+install(FILES includer.1 TYPE MAN)

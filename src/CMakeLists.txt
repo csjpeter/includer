@@ -7,9 +7,8 @@ add_executable(includer
 
 # Installation rules
 install(TARGETS includer
-        RUNTIME DESTINATION /usr/bin)
+		RUNTIME DESTINATION /usr/bin)
 
 # Find and link cxxopts
 find_package(cxxopts REQUIRED)
 target_link_libraries(includer PRIVATE cxxopts::cxxopts)
-
