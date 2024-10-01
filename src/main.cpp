@@ -2,11 +2,12 @@
  * @author Peter Csaszar (Császár Péter) (Copyright) 2024
  */
 
-#include "CliOptions.hpp"
-#include "FileHandler.hpp"
-#include "Processor.hpp"
+#include "CliOptions.h"
+#include "FileInputStreamFactory.h"
+#include "Processor.h"
+#include "StdInputStream.h"
+#include "StdOutputStream.h"
 #include <iostream>
-#include <sstream>
 
 int
 main(int argc, char **argv)
@@ -17,18 +18,16 @@ main(int argc, char **argv)
 		return 1;
 	}
 
-	FileHandler	  fileHandler;
-	Processor	  processor(fileHandler);
+	StdInputStream	       inputStream;
+	StdOutputStream	       outputStream;
+	FileInputStreamFactory fileInputStreamFactory(options.getTemplateDir());
 
-	std::stringstream inputBuffer;
-	inputBuffer << std::cin.rdbuf(); // Read from stdin
-	std::string input = inputBuffer.str();
+	Processor processor(inputStream, outputStream, fileInputStreamFactory,
+			    options.getTemplateDir());
 
 	try
 	{
-		std::string output = processor.process(
-				input, options.getTemplateDir());
-		std::cout << output;
+		processor.process();
 	}
 	catch (const std::exception &ex)
 	{

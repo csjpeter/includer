@@ -2,8 +2,7 @@
 add_executable(includer
 				main.cpp
 				CliOptions.cpp
-				Processor.cpp
-				FileHandler.cpp)
+				Processor.cpp)
 
 # Installation rules
 install(TARGETS includer

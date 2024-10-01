@@ -2,63 +2,149 @@
  * @author Peter Csaszar (Császár Péter) (Copyright) 2024
  */
 
-#include "MockFileHandler.hpp"
-#include "Processor.hpp"
+#include "MockFileInputStreamFactory.h"
+#include "MockInputStream.h"
+#include "MockOutputStream.h"
+#include "Processor.h"
 
 #include <gtest/gtest.h>
 
 TEST(ProcessorTest, TestIncludeProcessing)
 {
-	MockFileHandler mockHandler;
-	mockHandler.addMockFile("templates/file1.txt", "File 1 content");
+	MockInputStream inputStream(
+			"This is a test @include file1.txt@ end of test.");
+	MockOutputStream	   outputStream;
+	MockFileInputStreamFactory mockFactory;
 
-	Processor   processor(mockHandler);
-	std::string input  = "This is a test @include file1.txt@ end of test.";
-	std::string output = processor.process(input, "templates");
+	// Create a MockInputStream for the included file
+	auto			   includedFileStream
+			= std::make_unique<MockInputStream>("File 1 content");
 
-	EXPECT_EQ(output, "This is a test File 1 content end of test.");
+	// Set up expectation for the create() method
+	EXPECT_CALL(mockFactory, create("templates/file1.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(includedFileStream))));
+
+	Processor processor(inputStream, outputStream, mockFactory,
+			    "templates");
+
+	processor.process();
+
+	EXPECT_EQ(outputStream.getOutput(),
+		  "This is a test File 1 content end of test.");
 }
 
-TEST(ProcessorTest, TestFrameProcessing)
+TEST(ProcessorTest, TestTemplateProcessing)
 {
-	MockFileHandler mockHandler;
-	mockHandler.addMockFile("templates/frame.txt",
-				"Header @content@ Footer");
+	MockInputStream	 inputStream("@template_head template.txt@Content");
+	MockOutputStream outputStream;
+	MockFileInputStreamFactory mockFactory;
 
-	Processor   processor(mockHandler);
-	std::string input  = "Content@frame frame.txt@";
-	std::string output = processor.process(input, "templates");
+	// Create a MockInputStream for the frame file
+	auto frameFileStream = std::make_unique<MockInputStream>(
+			"Header @split@ Footer");
 
-	EXPECT_EQ(output, "Header Content Footer");
+	// Set up expectation for the create() method
+	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(frameFileStream))));
+
+	Processor processor(inputStream, outputStream, mockFactory,
+			    "templates");
+
+	processor.process();
+
+	EXPECT_EQ(outputStream.getOutput(), "Header Content Footer");
 }
 
-TEST(ProcessorTest, TestNestedFrameIntoInclude)
+TEST(ProcessorTest, TestNestedTemplateWithTailIntoInclude)
 {
-	MockFileHandler mockHandler;
-	mockHandler.addMockFile("templates/frame.txt",
-				"Header @content@ Footer");
-	mockHandler.addMockFile("templates/include.txt",
-				"Included @frame frame.txt@Content");
+	MockInputStream		   inputStream("@include include.txt@");
+	MockOutputStream	   outputStream;
+	MockFileInputStreamFactory mockFactory;
 
-	Processor   processor(mockHandler);
-	std::string input  = "@include include.txt@";
-	std::string output = processor.process(input, "templates");
+	// Create MockInputStreams for the included files
+	auto includeFileStream = std::make_unique<MockInputStream>(
+			"Included @template_head template.txt@Content1@tail@ "
+			"Content2");
+	auto templateFileStream = std::make_unique<MockInputStream>(
+			"Header @split@ Footer");
 
-	EXPECT_EQ(output, "Header Included Content Footer");
+	// Set up expectations for the create() method calls
+	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(includeFileStream))));
+	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(templateFileStream))));
+
+	Processor processor(inputStream, outputStream, mockFactory,
+			    "templates");
+
+	processor.process();
+
+	EXPECT_EQ(outputStream.getOutput(),
+		  "Included Header Content1 Footer Content2");
 }
 
-TEST(ProcessorTest, TestNestedIncludeInFrame)
+TEST(ProcessorTest, TestNestedTemplateIntoInclude)
 {
-	MockFileHandler mockHandler;
-	mockHandler.addMockFile("templates/frame.txt",
-				"Header @content@@include include.txt@ Footer");
-	mockHandler.addMockFile("templates/include.txt",
-				"Included @include deeper.txt@");
-	mockHandler.addMockFile("templates/deeper.txt", "Deeper Content");
+	MockInputStream		   inputStream("@include include.txt@");
+	MockOutputStream	   outputStream;
+	MockFileInputStreamFactory mockFactory;
 
-	Processor   processor(mockHandler);
-	std::string input  = "@frame frame.txt@";
-	std::string output = processor.process(input, "templates");
+	// Create MockInputStreams for the included files
+	auto includeFileStream = std::make_unique<MockInputStream>(
+			"Included @template_head template.txt@Content");
+	auto templateFileStream = std::make_unique<MockInputStream>(
+			"Header @split@ Footer");
 
-	EXPECT_EQ(output, "Header Included Deeper Content Footer");
+	// Set up expectations for the create() method calls
+	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(includeFileStream))));
+	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(templateFileStream))));
+
+	Processor processor(inputStream, outputStream, mockFactory,
+			    "templates");
+
+	processor.process();
+
+	EXPECT_EQ(outputStream.getOutput(), "Included Header Content Footer");
+}
+
+TEST(ProcessorTest, TestNestedIncludeInTemplate)
+{
+	MockInputStream		   inputStream("@template_head template.txt@");
+	MockOutputStream	   outputStream;
+	MockFileInputStreamFactory mockFactory;
+
+	// Create MockInputStreams for the included files
+	auto templateFileStream = std::make_unique<MockInputStream>(
+			"Header @split@@include include.txt@ Footer");
+	auto includeFileStream = std::make_unique<MockInputStream>(
+			"Included @include deeper.txt@");
+	auto deeperFileStream
+			= std::make_unique<MockInputStream>("Deeper Content");
+
+	// Set up expectations for the create() method calls
+	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(templateFileStream))));
+	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(includeFileStream))));
+	EXPECT_CALL(mockFactory, create("templates/deeper.txt"))
+			.WillOnce(testing::Return(testing::ByMove(
+					std::move(deeperFileStream))));
+
+	Processor processor(inputStream, outputStream, mockFactory,
+			    "templates");
+
+	processor.process();
+
+	EXPECT_EQ(outputStream.getOutput(),
+		  "Header Included Deeper Content Footer");
 }

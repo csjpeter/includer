@@ -2,7 +2,7 @@
  * @author Peter Csaszar (Császár Péter) (Copyright) 2024
  */
 
-#include "CliOptions.hpp"
+#include "CliOptions.h"
 
 #include <gtest/gtest.h>
 

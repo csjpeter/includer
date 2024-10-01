@@ -8,6 +8,9 @@ enable_testing()
 find_package(GTest REQUIRED)
 include(GoogleTest)
 
+# Find threads package
+find_package(Threads REQUIRED)
+
 # Source files for implementation
 set(SOURCE_SOURCES
     ../src/CliOptions.cpp
@@ -23,7 +26,8 @@ set(TEST_SOURCES
 
 # Source files for mocks
 set(MOCK_SOURCES
-    mocks/MockFileHandler.hpp
+    mocks/MockInputStream.h
+    mocks/MockOutputStream.h
 )
 
 # Include directories
@@ -38,9 +42,13 @@ add_executable(run_tests ${TEST_SOURCES} ${MOCK_SOURCES} ${SOURCE_SOURCES})
 # Find and link cxxopts
 find_package(cxxopts REQUIRED)
 target_link_libraries(run_tests
-						cxxopts::cxxopts
-						GTest::GTest
-						GTest::Main)
+                        PRIVATE
+                        cxxopts::cxxopts
+                        GTest::gtest
+                        GTest::gtest_main
+                        GTest::gmock
+                        GTest::gmock_main
+                        ${CMAKE_THREAD_LIBS_INIT})
 
 # Add tests to CTest
 gtest_discover_tests(run_tests)
