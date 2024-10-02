@@ -20,7 +20,7 @@ main(int argc, char **argv)
 
 	StdInputStream	       inputStream;
 	StdOutputStream	       outputStream;
-	FileInputStreamFactory fileInputStreamFactory(options.getTemplateDir());
+	FileInputStreamFactory fileInputStreamFactory;
 
 	Processor processor(inputStream, outputStream, fileInputStreamFactory,
 			    options.getTemplateDir());

@@ -12,20 +12,13 @@ class FileInputStreamFactory : public IFileInputStreamFactory
 {
 	public:
 
-	explicit FileInputStreamFactory(std::string templateDir)
-			: templateDir(std::move(templateDir))
+	explicit FileInputStreamFactory()
 	{
 	}
 
 	std::unique_ptr<IInputStream>
-	create(const std::string &filename) const override
+	create(const std::filesystem::path &filePath) const override
 	{
-		std::filesystem::path filePath
-				= std::filesystem::path(templateDir);
 		return std::make_unique<FileInputStream>(filePath.string());
 	}
-
-	private:
-
-	std::string templateDir;
 };

@@ -178,6 +178,8 @@ Processor::processTemplateHead(const std::string &filename)
 			= std::filesystem::path(templateDir) / filename;
 	const auto templateStream
 			= fileInputStreamFactory.create(filePath.string());
+	//outputStream.write("<!-- template head "+filePath.string()+" -->");
+	std::cerr << "<!-- template head "+filePath.string()+" -->" << std::endl;
 
 	// Process the head part until @split@ is found
 	processStream(*templateStream);
@@ -190,7 +192,6 @@ Processor::processTemplateHead(const std::string &filename)
 		tail += templateStream->readChar();
 	}
 
-	std::cerr << "Tail to stack: " << tail << std::endl;
 	// Store the tail for later processing
 	// Empty tail is important too because of nesting support
 	templateTails.push(tail);
@@ -207,7 +208,8 @@ Processor::processTail()
 
 	std::string tailContent = templateTails.top();
 	templateTails.pop();
-	std::cerr << "Tail to process: " << tailContent << std::endl;
+	//outputStream.write("<!-- template tail -->");
+	std::cerr << "<!-- template tail -->" << std::endl;
 	// Process the tail part, allowing for nested commands
 	StringInputStream tailStream(tailContent);
 	processStream(tailStream);
@@ -218,6 +220,8 @@ Processor::processInclude(const std::string &filename)
 {
 	std::filesystem::path filePath
 			= std::filesystem::path(templateDir) / filename;
+	//outputStream.write("<!-- including "+filePath.string()+" -->");
+	std::cerr << "<!-- including "+filePath.string()+" -->" << std::endl;
 	const auto includeStream
 			= fileInputStreamFactory.create(filePath.string());
 	processStream(*includeStream);

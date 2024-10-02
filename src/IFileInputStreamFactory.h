@@ -5,6 +5,7 @@
 #pragma once
 
 #include "IInputStream.h"
+#include <filesystem>
 #include <memory>
 
 class IFileInputStreamFactory
@@ -12,6 +13,6 @@ class IFileInputStreamFactory
 	public:
 
 	virtual std::unique_ptr<IInputStream> create(
-			const std::string &filename) const
+			const std::filesystem::path &filePath) const
 			= 0;
 };

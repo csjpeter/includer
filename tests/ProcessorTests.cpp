@@ -8,6 +8,7 @@
 #include "Processor.h"
 
 #include <gtest/gtest.h>
+#include <filesystem>
 
 TEST(ProcessorTest, TestIncludeProcessing)
 {
@@ -21,7 +22,7 @@ TEST(ProcessorTest, TestIncludeProcessing)
 			= std::make_unique<MockInputStream>("File 1 content");
 
 	// Set up expectation for the create() method
-	EXPECT_CALL(mockFactory, create("templates/file1.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/file1.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(includedFileStream))));
 
@@ -45,7 +46,7 @@ TEST(ProcessorTest, TestTemplateProcessing)
 			"Header @split@ Footer");
 
 	// Set up expectation for the create() method
-	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/template.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(frameFileStream))));
 
@@ -71,10 +72,10 @@ TEST(ProcessorTest, TestNestedTemplateWithTailIntoInclude)
 			"Header @split@ Footer");
 
 	// Set up expectations for the create() method calls
-	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/include.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(includeFileStream))));
-	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/template.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(templateFileStream))));
 
@@ -100,10 +101,10 @@ TEST(ProcessorTest, TestNestedTemplateIntoInclude)
 			"Header @split@ Footer");
 
 	// Set up expectations for the create() method calls
-	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/include.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(includeFileStream))));
-	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/template.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(templateFileStream))));
 
@@ -130,13 +131,13 @@ TEST(ProcessorTest, TestNestedIncludeInTemplate)
 			= std::make_unique<MockInputStream>("Deeper Content");
 
 	// Set up expectations for the create() method calls
-	EXPECT_CALL(mockFactory, create("templates/template.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/template.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(templateFileStream))));
-	EXPECT_CALL(mockFactory, create("templates/include.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/include.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(includeFileStream))));
-	EXPECT_CALL(mockFactory, create("templates/deeper.txt"))
+	EXPECT_CALL(mockFactory, create(std::filesystem::path("templates/deeper.txt")))
 			.WillOnce(testing::Return(testing::ByMove(
 					std::move(deeperFileStream))));
 

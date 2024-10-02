@@ -12,5 +12,5 @@ class MockFileInputStreamFactory : public IFileInputStreamFactory
 	public:
 
 	MOCK_METHOD(std::unique_ptr<IInputStream>, create,
-		    (const std::string &), (const, override));
+		    (const std::filesystem::path &filePath), (const, override));
 };
