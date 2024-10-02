@@ -13,52 +13,6 @@
 #include <regex>
 #include <stack>
 
-/*
-This class shall process input on the fly and write to output.
-
-While doing so, it should parse the input looking for the following
-possible commands:
-  @include filename@
-  @template_head filename@
-  @tail@
-
-The filename can be with path and shall be interpreted as relative to the
-templateDir.
-
-If include command is found, then the referenced file shall be opened and
-processed the same way aas the current input. Thus we gonna need a
-recursion here.
-
-If template_head if found, look for the referenced filename and expect it
-to be split into two parts, separated by command @split@. Out put the
-content till this separator command, and remember the ramaining part as
-it have to be sent to ouput once we find the tail command on the input.
-If there happened to be no tail command on the input, write the tail part
-when the input reached EOF.
-There can be multiple tempalte commands and those can be nested.
-
-Any temaplte and include command by be nested event with eachother.
-
-Please describe the grammer with appropriate notations.
-
-Please expect new command to be introduced later.
-
-
-```ebnf
-document = { text | command }
-command = include | template_head | tail | split
-include = "@include" filename "@"
-template_head = "@template_head" filename "@"
-tail = "@tail@"
-split = "@split@"
-filename = { any_character_except_@ }+
-text = { any_character_except_@ }+
-any_character_except_@ = ? any Unicode character except '@' ?
-```
-
-Note: This grammar allows for nested commands as per the requirements.
-*/
-
 Processor::Processor(const IInputStream	     &inputStream,
 		     IOutputStream	     &outputStream,
 		     IFileInputStreamFactory &fileInputStreamFactory,
