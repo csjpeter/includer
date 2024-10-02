@@ -5,7 +5,7 @@ all:
 	ctest --test-dir build/Debug --output-on-failure --stop-on-failure
 	cd build/Debug && make package
 	mkdir -p release/bin
-	cp build/Debug/src/includer release/bin/
+	cp build/Debug/src/main/includer release/bin/
 	cp build/Debug/_CPack_Packages/Linux/DEB/includer-1.0.0-Linux.deb release/
 	cp build/Debug/_CPack_Packages/Linux/RPM/RPMS/includer-1.0.0-Linux.rpm release/
 

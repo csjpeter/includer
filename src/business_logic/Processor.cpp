@@ -4,6 +4,8 @@
 
 #include "Processor.h"
 #include "IFileInputStreamFactory.h"
+#include "IOutputStream.h"
+#include "IInputStream.h"
 #include "StringInputStream.h"
 
 #include <filesystem>
