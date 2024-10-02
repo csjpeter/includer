@@ -3,8 +3,8 @@
 add_executable(includer main.cpp)
 
 target_include_directories(includer
-	PUBLIC ${CMAKE_SOURCE_DIR}/src/interfaces
-	PUBLIC ${CMAKE_SOURCE_DIR}/src/main)
+	PUBLIC ${CMAKE_SOURCE_DIR}/src/ifc
+	PUBLIC ${CMAKE_SOURCE_DIR}/src/app)
 
 # Find and link cxxopts
 find_package(cxxopts REQUIRED)

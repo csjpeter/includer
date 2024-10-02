@@ -13,8 +13,8 @@ find_package(Threads REQUIRED)
 
 # Source files for implementation
 set(SOURCE_SOURCES
-    ../src/business_logic/CliOptions.cpp
-    ../src/business_logic/Processor.cpp
+    ../src/applib/CliOptions.cpp
+    ../src/applib/Processor.cpp
     # Add other source files here
 )
 
@@ -33,8 +33,8 @@ set(MOCK_SOURCES
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/tests/mocks)
 include_directories(${CMAKE_SOURCE_DIR}/tests)
-include_directories(${CMAKE_SOURCE_DIR}/src/interfaces)
-include_directories(${CMAKE_SOURCE_DIR}/src/business_logic)
+include_directories(${CMAKE_SOURCE_DIR}/src/ifc)
+include_directories(${CMAKE_SOURCE_DIR}/src/applib)
 
 # Create the test executable
 add_executable(run_tests ${TEST_SOURCES} ${MOCK_SOURCES} ${SOURCE_SOURCES})
