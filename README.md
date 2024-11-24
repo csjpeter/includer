@@ -2,7 +2,8 @@
 
 ## Overview
 
-The includer application is a C++ program designed to process input streams and handle specific commands embedded within the stream. It supports commands for including files, handling template heads and tails, and splitting the stream processing.
+The includer application is a C++ program designed to process input streams and handle specific commands embedded within the stream.
+It supports commands for including files and templates (in single file) having head and tail separated by a split command.
 
 ## Features
 
