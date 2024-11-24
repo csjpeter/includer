@@ -162,7 +162,7 @@ Processor::processTail()
 			// @template_head@
 	}
 
-	std::string tailContent = templateTails.top();
+	std::string tailContent = std::move(templateTails.top());
 	templateTails.pop();
 	//outputStream.write("<!-- template tail -->");
 	std::cerr << "<!-- template tail -->" << std::endl;
